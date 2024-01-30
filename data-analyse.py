@@ -6,7 +6,7 @@ import pandas as pd
 
 pm25_df = pd.read_csv('data/PM2.5 data.csv')
 pm10_df = pd.read_csv('data/PM10 data.csv')
-O3_df = pd.read_csv('data/O3 data.csv')
+o3_df = pd.read_csv('data/O3 data.csv')
 
 
 class data_storage:
@@ -23,7 +23,7 @@ class data_storage:
 
 pm25_s = data_storage(pm25_df.index, pm25_df.value, 5,30, 'PM2.5 (μg/m3)')
 pm10_s = data_storage(pm10_df.index, pm10_df.value, 25,55, 'PM10 (μg/m3)')
-O3_s = data_storage(O3_df.index, O3_df.value, 70,130, 'O3 (ppb)')
+o3_s = data_storage(o3_df.index, o3_df.value, 70,130, 'O3 (ppb)')
 
 # choose the data here
 storage = pm25_s
