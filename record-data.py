@@ -31,10 +31,10 @@ try:
                     pass
                 
             else:
-                pm25_value, pm100_value, O3_value = [float(ele) for ele in line.split(',')]
+                pm25_value, pm100_value, o3_value = [float(ele) for ele in line.split(',')]
                 data['PM2.5'] = pm25_value
                 data['PM10'] = pm100_value
-                data['O3'] = O3_value
+                data['O3'] = o3_value
                 client.send(data=data)
 except KeyboardInterrupt:
     pass
