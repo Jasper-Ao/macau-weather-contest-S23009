@@ -8,17 +8,37 @@ void nextphase(int phase_num) {
   phase = phase_num;
 }
 
+
+SoftwareSerial bd_serial(8, 9);
+String buffer = "";
+bool end = false;
+
+String str_char = "";
+bool is_num(String str){
+  if (str.length() == 0) return false;
+
+  for (byte i=0;i<str.length();i++) {
+    str_char = String(str.charAt(i));
+    if (str_char != ".") {
+      if (!isDigit(str.charAt(i))) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+
 SoftwareSerial pms_serial(2, 3);
 PMS pms(pms_serial);
 PMS::DATA data;
 
-SoftwareSerial bd_serial(8, 9);
-String buffer = "";
 
 int O3_NUM = 0;
 float O3_V = 0.0;
 float O3_ppb = 0.0;
 int sensorPin = A0;
+
 
 String output = "";
 
@@ -32,9 +52,11 @@ void setup() {
 
       if (c == '\n') {
         if (buffer.startsWith("$GNGLL")) {
-          processGNGLL(buffer);
-          bd_serial.end();
-          break;
+          end = processGNGLL(buffer);
+          if (end) {
+            bd_serial.end();
+            break;
+          }
         }
         buffer = "";
       }
@@ -87,7 +109,7 @@ void getO3() {
   output = "";
 }
 
-void processGNGLL(String data) {
+bool processGNGLL(String data) {
   char charBuffer[100];
   data.toCharArray(charBuffer, 100);
 
@@ -114,4 +136,10 @@ void processGNGLL(String data) {
   Serial.print(",");
   Serial.print(longitude);
   Serial.println("");
+
+  if (is_num(latitude) && is_num(longitude)) {
+    return true;
+  } else {
+    return false;
+  }
 }
