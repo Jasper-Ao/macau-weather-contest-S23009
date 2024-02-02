@@ -28,8 +28,8 @@ o3_s = data_storage(o3_df.index, o3_df.value, 70,130, 'O3 (ppb)')
 # choose the data here
 storage = pm25_s
 
-# 0 = linear regression, 1 = nonlinear regression
-mode = 0
+# 0 = linear regression, 1 = nonlinear regression, 2 = all linear regression, 3 = all nonlinear regression
+mode = 2
 
 
 def quadratic_func(x, a, b, c):
@@ -46,5 +46,22 @@ if mode == 0:
     plt.plot(storage.x, storage.y, 'b', storage.x, storage.m*storage.x + storage.b, 'r')
 elif mode == 1:
     plt.plot(storage.x, storage.y, 'b', storage.x, quadratic_func(storage.x, *popt), 'r')
+elif mode == 2:
+    plt.ylim(0, 30)
+    plt.xlabel('time interval (30s)')
+    plt.ylabel('All linear regression lines')
+
+    for stor, color, reduced_val in zip([pm25_s, pm10_s, o3_s], ['r','b','g'], [5, 30, 90]):
+        popt, pcov = curve_fit(quadratic_func, stor.x, stor.y)
+        plt.plot(stor.x, stor.m*stor.x + stor.b - reduced_val, color)
+elif mode == 3:
+    plt.ylim(0, 40)
+    plt.xlabel('time interval (30s)')
+    plt.ylabel('All nonlinear regression lines')
+
+    for stor, color, reduced_val in zip([pm25_s, pm10_s, o3_s], ['r','b','g'], [5, 30, 90]):
+        popt, pcov = curve_fit(quadratic_func, stor.x, stor.y)
+        plt.plot(storage.x, quadratic_func(storage.x, *popt) - reduced_val, color)
+
 
 plt.show()
