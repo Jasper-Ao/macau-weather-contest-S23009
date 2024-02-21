@@ -42,7 +42,7 @@ def name_to_node(name):
 root = Tk()
 main_canvas = Canvas(root, width=876,height=656)
 main_canvas.pack()
-bg = PhotoImage(file="python/test/images/pcms layout simple.png")
+bg = PhotoImage(file="map.png")
 main_canvas.create_image(439,329, image=bg)
 
 
